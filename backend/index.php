@@ -1,4 +1,5 @@
 <?php
+    require_once 'configs.php';
     require_once 'routes.php';
 
     $routes = new Routers([
