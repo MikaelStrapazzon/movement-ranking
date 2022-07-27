@@ -34,6 +34,9 @@ class Routers {
                 return $route['controller']();
         }
 
-        return ['error' => 'Route does not exist'];
+        return [
+            'code' => 404,
+            'error' => 'Route does not exist'
+        ];
     }
 }

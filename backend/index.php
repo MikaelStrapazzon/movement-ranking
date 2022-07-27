@@ -4,7 +4,7 @@
 
     $routes = new Routers([
         [
-            'route' => 'teste',
+            'route' => 'movement',
             'method' => 'GET',
             'controller' => 'MovementController::listAction'
         ]
