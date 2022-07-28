@@ -38,6 +38,18 @@ class Movement {
         return $dabase->bd_select('select * from movement');
     }
 
+    /**
+     * Returns each user's record ranking in a Movement
+     * @return array Ranking movement
+     *  string movementName => Movement name
+     *  array userRecordsList => List users record
+     *    [{
+     *      string name => User name
+     *      string userRecordValue => Highest user record
+     *      string date => User highest record date
+     *      int position => User position in the ranking
+     *    }]
+     */
     public function rankingBestRecordMovement() {
         $sql =
             "SELECT
