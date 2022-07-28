@@ -10,7 +10,13 @@ class MovementController {
     }
 
     public static function rankingAction() {
-        $movement = new Movement(1);
+        if(empty($_GET['idMovement']) || !is_numeric($_GET['idMovement']))
+            return [
+                'code' => '400',
+                'error' => 'Movement id informed is not accepted'
+            ];
+
+        $movement = new Movement($_GET['idMovement']);
 
         return [
             'code' => '200',
