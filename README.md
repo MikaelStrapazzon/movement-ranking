@@ -16,4 +16,4 @@ docker-compose up
 
 ## Endpoints
  - movements - GET => Retorna todos Movements
- - ranking/<idMovement> - GET => Retorna o ranking do recorde pessoal de cada usuário no Movement
+ - ranking/\<idMovement\> - GET => Retorna o ranking do recorde pessoal de cada usuário no Movement
