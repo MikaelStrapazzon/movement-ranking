@@ -4,12 +4,12 @@
 
     $routes = new Routers([
         [
-            'route' => 'movement',
+            'route' => 'movements',
             'method' => 'GET',
             'controller' => 'MovementController::listAction'
         ],
         [
-            'route' => 'ranking',
+            'route' => 'ranking/<idMovement>',
             'method' => 'GET',
             'controller' => 'MovementController::rankingAction'
         ]

@@ -35,7 +35,7 @@ class Movement {
     public static function findAll() {
         $dabase = new Database();
 
-        return $dabase->bd_select('select * from movement');
+        return $dabase->bd_select('SELECT * FROM movement');
     }
 
     /**
@@ -77,8 +77,7 @@ class Movement {
                     table1.user_id = user.id
             ORDER BY(
                 `value`
-            ) DESC
-            ;";
+            ) DESC";
 
         $dabase = new Database();
         $rankingUsers = $dabase->bd_select($sql, [$this->id]);

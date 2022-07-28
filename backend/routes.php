@@ -30,8 +30,27 @@ class Routers {
         $methodRequest = $_SERVER['REQUEST_METHOD'];
 
         foreach($this->routes as $route) {
-            if($routeRequest == $route['route'] && $methodRequest == $route['method'])
-                return $route['controller']();
+            if(!preg_match('/\<(.[^\/])+\>/', $route['route'])) {
+                if($routeRequest == $route['route'] && $methodRequest == $route['method'])
+                    return $route['controller']();
+            }
+            else {
+                $explodeRoute = explode('/', $route['route']);
+                $explodeRouteRequest = explode('/', $routeRequest);
+
+                if(count($explodeRoute) != count($explodeRouteRequest))
+                    continue;
+
+                $valuesParameters = [];
+                foreach($explodeRoute as $indice => $partRoute) {
+                    if(preg_match('/^\<.+\>$/', $partRoute))
+                        $valuesParameters[] = $explodeRouteRequest[$indice];
+                    else if($partRoute != $explodeRouteRequest[$indice])
+                        continue 2;
+                }
+
+                return call_user_func_array($route['controller'], $valuesParameters);
+            }
         }
 
         return [
