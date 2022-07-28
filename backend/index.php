@@ -7,6 +7,11 @@
             'route' => 'movement',
             'method' => 'GET',
             'controller' => 'MovementController::listAction'
+        ],
+        [
+            'route' => 'ranking',
+            'method' => 'GET',
+            'controller' => 'MovementController::rankingAction'
         ]
     ]);
 

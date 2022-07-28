@@ -8,4 +8,11 @@ class MovementController {
             'data' => Movement::findAll()
         ];
     }
+
+    public static function rankingAction() {
+        return [
+            'code' => '200',
+            'data' => Movement::rankingBestRecordMovement('1')
+        ];
+    }
 }
