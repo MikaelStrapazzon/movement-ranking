@@ -10,9 +10,21 @@ class Movement {
      * @param int $id Movement ID
      * (opcional) @param string $nameMovement Movement name
      */
-    public function __call($idMovement, $nameMovement = '') {
+    public function __construct($idMovement, $nameMovement = '') {
         $this->id = $idMovement;
-        $this->name = $nameMovement;
+
+        if($nameMovement == '') {
+            $dabase = new Database();
+
+            $informationsMovement = $dabase->bd_select(
+                'SELECT `name` FROM movement WHERE id=[%1]',
+                [$idMovement]
+            );
+
+            $this->name = $informationsMovement[0]['name'];
+        }
+        else
+            $this->name = $nameMovement;
     }
     /**
      * Return all movement
@@ -26,18 +38,18 @@ class Movement {
         return $dabase->bd_select('select * from movement');
     }
 
-    public static function rankingBestRecordMovement($idMovement) {
+    public function rankingBestRecordMovement() {
         $sql =
             "SELECT
                 `name`,
-                `userRecord`,
+                `userRecordValue`,
                 `date`
             FROM
                 `personal_record` AS table1
             INNER JOIN (
                 SELECT
                     `user_id`,
-                    max(`value`) as userRecord
+                    max(`value`) as userRecordValue
                 FROM
                     `personal_record`
                 WHERE
@@ -47,7 +59,7 @@ class Movement {
                 )
             ) AS table2 on
                 table2.user_id = table1.user_id AND
-                table2.userRecord = table1.value
+                table2.userRecordValue = table1.value
             INNER JOIN
                 user ON
                     table1.user_id = user.id
@@ -57,14 +69,14 @@ class Movement {
             ;";
 
         $dabase = new Database();
-        $rankingUsers = $dabase->bd_select($sql, [$idMovement]);
+        $rankingUsers = $dabase->bd_select($sql, [$this->id]);
 
         $lastPosition = 1;
         $nextPosition = 1;
         $lastValue = 0;
 
         foreach($rankingUsers as &$userRecord) {
-            if($userRecord['userRecord'] != $lastValue) {
+            if($userRecord['userRecordValue'] != $lastValue) {
                 $userRecord['position'] = $nextPosition;
 
                 $lastPosition = $nextPosition;
@@ -76,26 +88,12 @@ class Movement {
                 $nextPosition++;
             }
 
-            $lastValue = $userRecord['userRecord'];
+            $lastValue = $userRecord['userRecordValue'];
         }
 
-        return $rankingUsers;
+        return [
+            'movementName' => $this->name,
+            'userRecordsList' => $rankingUsers
+        ];
     }
 }
-
-//SELECT `user_id`, max(`value`) FROM `personal_record` WHERE `movement_id`=1 GROUP BY(`user_id`) ORDER BY max(`value`) DESC;
-
-// SELECT
-// 	*
-// from
-// 	`personal_record` as t1
-// INNER JOIN (
-// 	SELECT
-//     	`user_id`,
-//     	max(`value`) as valuem
-//     FROM
-//     	`personal_record`
-//     WHERE
-//     	`movement_id`=1
-//     GROUP BY(`user_id`)
-// ) as t2 on t2.user_id = t1.user_id and t2.valuem = t1.value;

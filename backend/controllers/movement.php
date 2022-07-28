@@ -10,9 +10,11 @@ class MovementController {
     }
 
     public static function rankingAction() {
+        $movement = new Movement(1);
+
         return [
             'code' => '200',
-            'data' => Movement::rankingBestRecordMovement('1')
+            'data' => $movement->rankingBestRecordMovement()
         ];
     }
 }
